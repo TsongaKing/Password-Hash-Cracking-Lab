@@ -1,12 +1,32 @@
 Password Hash Cracking Lab
-Overview
-This project documents a hands-on cybersecurity lab focused on identifying and cracking different password hash types using industry-standard password auditing tools.
+⭐ Lab Type
 
-The objective was to understand how password hashing works, how weak passwords can be recovered using dictionary attacks, and how salts and keys affect cracking methods.
+Password Security / Cryptography
+
+🔧 Environment
+
+Kali Linux, Hashcat, John the Ripper, CyberChef
+
+🧠 Skills
+
+Hash Identification, Dictionary Attacks, Security Tooling, Cryptography Verification
+
+Overview
+
+This project documents a hands-on cybersecurity lab focused on identifying and cracking various password hash types using industry-standard password auditing tools.
+
+The objective was to understand:
+
+How password hashing works
+
+How weak passwords can be recovered using dictionary attacks
+
+The impact of salts and HMAC keys on cracking methods
 
 This exercise demonstrates practical skills used in security testing, incident response, and authentication security analysis.
 
 📋 Table of Contents
+
 Objectives
 
 Tools Used
@@ -15,7 +35,7 @@ Hash Types Investigated
 
 Methodology
 
-Challenges Faced
+Challenges Faced & Solutions
 
 Command Examples
 
@@ -25,13 +45,18 @@ Verification
 
 Key Lessons Learned
 
+Real-World Security Implications
+
 Skills Demonstrated
 
 Next Steps
 
 Author
 
+Acknowledgments
+
 🎯 Objectives
+
 Identify different cryptographic hash types
 
 Understand the impact of salting and HMAC on password security
@@ -50,36 +75,36 @@ CyberChef	Cryptographic analysis and verification tool
 Kali Linux	Operating system with pre-installed security tools
 rockyou.txt	Common password wordlist for dictionary attacks
 🔐 Hash Types Investigated
-During the lab, several common password hashing algorithms were analyzed and cracked:
-
 Hash Type	Description	Hashcat Mode
 MD5	Legacy 128-bit hashing algorithm commonly found in old databases	0
 NTLM	Windows authentication hash used in Microsoft environments	1000
 SHA256	256-bit secure cryptographic hashing algorithm	1400
 SHA512	512-bit strong hashing algorithm often used in secure systems	1700
-bcrypt	Adaptive password hashing with cost factor; resistant to brute force	3200
+bcrypt	Adaptive password hashing designed to slow brute-force attacks using a configurable cost factor	3200
 HMAC-SHA1	Keyed-hash message authentication code using SHA1	160
 📝 Methodology
 1. Hash Identification
+
 Each hash was analyzed to determine the correct algorithm before cracking. Identification was done by examining:
 
 Hash length (number of characters)
 
 Character set (hexadecimal vs. special characters)
 
-Prefix indicators (e.g., $2a$ for bcrypt, $6$ for SHA512crypt)
+Prefix indicators (e.g., $2a$ for bcrypt)
 
 Context (where the hash came from)
 
 Correct identification is critical because cracking tools require the correct mode to work efficiently.
 
 2. Dictionary Attack
+
 A dictionary attack was performed using the rockyou.txt password list, which contains over 14 million leaked passwords.
 
 Basic Hashcat syntax:
 
-bash
 hashcat -m [MODE] -a 0 hash.txt /usr/share/wordlists/rockyou.txt
+
 Parameters:
 
 Option	Meaning
@@ -88,46 +113,39 @@ Option	Meaning
 hash.txt	File containing target hashes
 rockyou.txt	Password wordlist
 3. Verification
-Recovered passwords were verified by recreating the hash using CyberChef and comparing the output to the original hash. Matching outputs confirm successful cracking.
+
+Recovered passwords were verified by recreating the hash using CyberChef and comparing the output to the original hash. Matching outputs confirmed successful cracking.
 
 ⚠️ Challenges Faced & Solutions
 Challenge	Solution
 Hashcat "Token length exception"	Corrected hash format to hash:key for HMAC modes
 rockyou.txt not found	Located at /usr/share/wordlists/rockyou.txt; extracted with sudo gunzip
-Choosing correct hash mode	Used hash length and prefixes to identify algorithm
-HMAC format requirements	Learned that HMAC cracking requires both hash AND key
+Choosing correct hash mode	Used hash length, prefix, and context to identify algorithm
+HMAC format requirements	Learned that HMAC cracking requires both hash and key
 💻 Command Examples
 MD5 Cracking
-bash
 echo "5f4dcc3b5aa765d61d8327deb882cf99" > hash.txt
 hashcat -m 0 -a 0 hash.txt /usr/share/wordlists/rockyou.txt
 NTLM Cracking
-bash
 echo "b4b9b02e6f09a9bd760f388b67351e2b" > ntlm.txt
 hashcat -m 1000 -a 0 ntlm.txt /usr/share/wordlists/rockyou.txt
 SHA256 Cracking
-bash
 echo "e24df70c9d9c81d60f0e475be740a6cee28744087976f74974d4390396ce36f1" > sha256.txt
 hashcat -m 1400 -a 0 sha256.txt /usr/share/wordlists/rockyou.txt
 SHA512 Cracking
-bash
 echo "faa2b8b7cd11d908f101df15a0b12d4c05a89abc9604df0f275a4fc9a00280027c95c4b0e1dfa314b2c4224e820146568205ffd1e58eb7bf6fd07dfe79b83060" > sha512.txt
 hashcat -m 1700 -a 0 sha512.txt /usr/share/wordlists/rockyou.txt
 bcrypt Cracking
-bash
 echo '$2a$06$7yoU3Ng8dHTXphAg913cyO6Bjs3K5lBnwq5FJyA6d01pMSrddr1ZG' > bcrypt.txt
 hashcat -m 3200 -a 0 bcrypt.txt /usr/share/wordlists/rockyou.txt
 HMAC-SHA1 Cracking (with key)
-bash
 # Format: hash:key
 echo 'e5d8870e5bdd26602cab8dbe07a942c8669e56d6:tryhackme' > hmac.txt
 hashcat -m 160 -a 0 hmac.txt /usr/share/wordlists/rockyou.txt -o cracked.txt
 John the Ripper Alternative
-bash
 john --format=raw-md5 --wordlist=/usr/share/wordlists/rockyou.txt hash.txt
 john --show hash.txt
 Viewing Cracked Passwords
-bash
 # Check Hashcat potfile
 cat ~/.hashcat/hashcat.potfile
 
@@ -137,97 +155,79 @@ cat ~/.john/john.pot
 # Show Hashcat results
 hashcat -m 160 --show hmac.txt
 📊 Results
-All target hashes were successfully cracked using dictionary attacks with the rockyou.txt wordlist:
-
 Hash	Password	Algorithm
 5f4dcc3b5aa765d61d8327deb882cf99	password	MD5
-b4b9b02e6f09a9bd760f388b67351e2b	[NTLM password]	NTLM
+b4b9b02e6f09a9bd760f388b67351e2b	n63umy8lkf4i	NTLM
 e24df70c9d9c81d60f0e475be740a6cee28744087976f74974d4390396ce36f1	sadierose	SHA256
 faa2b8b7cd11d908f101df15a0b12d4c05a89abc9604df0f275a4fc9a00280027c95c4b0e1dfa314b2c4224e820146568205ffd1e58eb7bf6fd07dfe79b83060	class1999	SHA512
 $2a$06$7yoU3Ng8dHTXphAg913cyO6Bjs3K5lBnwq5FJyA6d01pMSrddr1ZG	85208520	bcrypt
-e5d8870e5bdd26602cab8dbe07a942c8669e56d6:tryhackme	481616481616	HMAC-SHA1
-✅ Verification with CyberChef
-All cracked passwords were verified using CyberChef to ensure accuracy:
+e5d8870e5bdd26602cab8dbe07a942c8669e56d6 (key: tryhackme)	481616481616	HMAC-SHA1
+✅ Verification
 
-HMAC-SHA1 Verification Example:
-Navigate to CyberChef
+All cracked passwords were verified using CyberChef:
 
-Add HMAC operation
-
-Configure:
-
+HMAC-SHA1 Verification:
 Key: tryhackme
-
-Algorithm: SHA1
-
 Input: 481616481616
+Output matches hash: ✅
 
-Output matches: e5d8870e5bdd26602cab8dbe07a942c8669e56d6 ✓
-
-SHA256 Verification Example:
-Add SHA256 operation
-
+SHA256 Verification:
 Input: sadierose
-
-Output matches: e24df70c9d9c81d60f0e475be740a6cee28744087976f74974d4390396ce36f1 ✓
+Output matches hash: ✅
 
 📚 Key Lessons Learned
-Password Weakness
-Weak passwords contained in common wordlists can be cracked within seconds using dictionary attacks. Even complex-looking numeric passwords like 481616481616 are vulnerable if they appear in wordlists.
 
-Importance of Salting
-Salts make precomputed attacks such as rainbow tables infeasible by ensuring that identical passwords produce different hashes.
+Weak passwords in common wordlists can be cracked within seconds
 
-HMAC Security
-HMAC adds a secret key to the hashing process, increasing security compared to standard hashes. However, if the key is known (as in this lab), the password can still be cracked.
+Salting protects against precomputed attacks such as rainbow tables
 
-Tool Proficiency
-Learning to use tools like Hashcat and John the Ripper is essential for:
+HMAC increases security but requires a secret key; if key is known, cracking is possible
 
-Penetration testing
+Tool proficiency is essential for penetration testing, digital forensics, and password auditing
 
-Digital forensics
+Hash format matters; HMAC requires hash:key format
 
-Password security auditing
+🔐 Real-World Security Implications
 
-Incident response
+Legacy hashes (MD5, SHA1) are insecure and should not be used for password storage
 
-Hash Format Matters
-Tools require precise formatting. The hash:key format for HMAC cracking was essential for success.
+Modern systems use slow algorithms like bcrypt, PBKDF2, Argon2 to increase cracking difficulty
+
+Even numeric passwords can be vulnerable if they appear in wordlists
 
 🏆 Skills Demonstrated
-✅ Hash type identification
 
-✅ Linux command-line proficiency
+Hash type identification
 
-✅ Password cracking techniques
+Linux command-line proficiency
 
-✅ Dictionary attacks
+Password cracking techniques
 
-✅ Hash verification methods
+Dictionary attacks
 
-✅ Security tool usage (Hashcat, John, CyberChef)
+Hash verification methods
 
-✅ Problem-solving and troubleshooting
+Security tool usage (Hashcat, John, CyberChef)
+
+Problem-solving and troubleshooting
 
 🔮 Next Steps
-Future work could include:
 
-Attempting salted MD5 and SHA256 cracking
+Attempt salted MD5 and SHA256 cracking
 
-Exploring rule-based attacks with Hashcat
+Explore rule-based attacks with Hashcat
 
-Generating and using rainbow tables
+Generate and use custom rainbow tables
 
-Cracking more complex hash formats (e.g., TrueCrypt, LUKS)
+Crack more complex hash formats (e.g., TrueCrypt, LUKS)
 
-Building custom wordlists with CeWL
+Build custom wordlists with CeWL
 
-Understanding GPU acceleration for faster cracking
+Understand GPU acceleration for faster cracking
 
 👤 Author
-Phangasasa Muhlaba
 
+Phangasasa Muhlaba
 Aspiring Cloud Security Engineer focused on:
 
 Microsoft Azure security
@@ -238,18 +238,17 @@ Cloud infrastructure protection
 
 Cybersecurity fundamentals
 
-GitHub Profile | LinkedIn
+GitHub Profile
+ | LinkedIn
 
 🙏 Acknowledgments
+
 TryHackMe for the hash cracking challenges
 
 Hashcat and John the Ripper development teams
 
 The cybersecurity community for sharing knowledge and wordlists
 
-<div align="center">
-⭐ If you found this project helpful, please star it on GitHub! ⭐
+<div align="center"> ⭐ If you found this project helpful, please star it on GitHub! ⭐ </div>
 
-</div>
 This project was completed for educational purposes to understand password security and auditing techniques.
-
