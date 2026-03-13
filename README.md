@@ -6,7 +6,32 @@ The objective was to understand how password hashing works, how weak passwords c
 
 This exercise demonstrates practical skills used in security testing, incident response, and authentication security analysis.
 
+📋 Table of Contents
 Objectives
+
+Tools Used
+
+Hash Types Investigated
+
+Methodology
+
+Challenges Faced
+
+Command Examples
+
+Results
+
+Verification
+
+Key Lessons Learned
+
+Skills Demonstrated
+
+Next Steps
+
+Author
+
+🎯 Objectives
 Identify different cryptographic hash types
 
 Understand the impact of salting and HMAC on password security
@@ -17,14 +42,14 @@ Perform dictionary attacks using common wordlists
 
 Verify cracked hashes using cryptographic tools
 
-Tools Used
+🛠️ Tools Used
 Tool	Purpose
 Hashcat	GPU/CPU accelerated password recovery tool
 John the Ripper	Password cracking and auditing tool
 CyberChef	Cryptographic analysis and verification tool
 Kali Linux	Operating system with pre-installed security tools
 rockyou.txt	Common password wordlist for dictionary attacks
-Hash Types Investigated
+🔐 Hash Types Investigated
 During the lab, several common password hashing algorithms were analyzed and cracked:
 
 Hash Type	Description	Hashcat Mode
@@ -34,7 +59,7 @@ SHA256	256-bit secure cryptographic hashing algorithm	1400
 SHA512	512-bit strong hashing algorithm often used in secure systems	1700
 bcrypt	Adaptive password hashing with cost factor; resistant to brute force	3200
 HMAC-SHA1	Keyed-hash message authentication code using SHA1	160
-Methodology
+📝 Methodology
 1. Hash Identification
 Each hash was analyzed to determine the correct algorithm before cracking. Identification was done by examining:
 
@@ -65,13 +90,13 @@ rockyou.txt	Password wordlist
 3. Verification
 Recovered passwords were verified by recreating the hash using CyberChef and comparing the output to the original hash. Matching outputs confirm successful cracking.
 
-Challenges Faced & Solutions
+⚠️ Challenges Faced & Solutions
 Challenge	Solution
 Hashcat "Token length exception"	Corrected hash format to hash:key for HMAC modes
 rockyou.txt not found	Located at /usr/share/wordlists/rockyou.txt; extracted with sudo gunzip
 Choosing correct hash mode	Used hash length and prefixes to identify algorithm
 HMAC format requirements	Learned that HMAC cracking requires both hash AND key
-Command Examples
+💻 Command Examples
 MD5 Cracking
 bash
 echo "5f4dcc3b5aa765d61d8327deb882cf99" > hash.txt
@@ -111,7 +136,7 @@ cat ~/.john/john.pot
 
 # Show Hashcat results
 hashcat -m 160 --show hmac.txt
-Results
+📊 Results
 All target hashes were successfully cracked using dictionary attacks with the rockyou.txt wordlist:
 
 Hash	Password	Algorithm
@@ -121,7 +146,7 @@ e24df70c9d9c81d60f0e475be740a6cee28744087976f74974d4390396ce36f1	sadierose	SHA25
 faa2b8b7cd11d908f101df15a0b12d4c05a89abc9604df0f275a4fc9a00280027c95c4b0e1dfa314b2c4224e820146568205ffd1e58eb7bf6fd07dfe79b83060	class1999	SHA512
 $2a$06$7yoU3Ng8dHTXphAg913cyO6Bjs3K5lBnwq5FJyA6d01pMSrddr1ZG	85208520	bcrypt
 e5d8870e5bdd26602cab8dbe07a942c8669e56d6:tryhackme	481616481616	HMAC-SHA1
-Verification with CyberChef
+✅ Verification with CyberChef
 All cracked passwords were verified using CyberChef to ensure accuracy:
 
 HMAC-SHA1 Verification Example:
@@ -144,9 +169,9 @@ Add SHA256 operation
 
 Input: sadierose
 
-Output matches target hash ✓
+Output matches: e24df70c9d9c81d60f0e475be740a6cee28744087976f74974d4390396ce36f1 ✓
 
-Key Lessons Learned
+📚 Key Lessons Learned
 Password Weakness
 Weak passwords contained in common wordlists can be cracked within seconds using dictionary attacks. Even complex-looking numeric passwords like 481616481616 are vulnerable if they appear in wordlists.
 
@@ -170,7 +195,7 @@ Incident response
 Hash Format Matters
 Tools require precise formatting. The hash:key format for HMAC cracking was essential for success.
 
-Skills Demonstrated
+🏆 Skills Demonstrated
 ✅ Hash type identification
 
 ✅ Linux command-line proficiency
@@ -185,7 +210,7 @@ Skills Demonstrated
 
 ✅ Problem-solving and troubleshooting
 
-Next Steps
+🔮 Next Steps
 Future work could include:
 
 Attempting salted MD5 and SHA256 cracking
@@ -200,7 +225,7 @@ Building custom wordlists with CeWL
 
 Understanding GPU acceleration for faster cracking
 
-Author
+👤 Author
 Phangasasa Muhlaba
 
 Aspiring Cloud Security Engineer focused on:
@@ -213,12 +238,18 @@ Cloud infrastructure protection
 
 Cybersecurity fundamentals
 
-Acknowledgments
+GitHub Profile | LinkedIn
+
+🙏 Acknowledgments
 TryHackMe for the hash cracking challenges
 
 Hashcat and John the Ripper development teams
 
 The cybersecurity community for sharing knowledge and wordlists
 
+<div align="center">
+⭐ If you found this project helpful, please star it on GitHub! ⭐
+
+</div>
 This project was completed for educational purposes to understand password security and auditing techniques.
 
